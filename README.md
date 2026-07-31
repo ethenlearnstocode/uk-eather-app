@@ -2,7 +2,7 @@ this is an effort to build a new website
 
 
 code detail , the below is code version post task 3 ( making the appearance of website more professional)
----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,6 @@ code detail , the below is code version post task 3 ( making the appearance of w
             --card-bg: #ffffff;
             --border-radius: 12px;
         }
-
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
@@ -33,7 +32,6 @@ code detail , the below is code version post task 3 ( making the appearance of w
             padding: 20px;
             box-sizing: border-box;
         }
-
         .container {
             background-color: var(--card-bg);
             padding: 2.5rem;
@@ -43,19 +41,16 @@ code detail , the below is code version post task 3 ( making the appearance of w
             max-width: 450px;
             text-align: center;
         }
-
         h2 {
             margin-top: 0;
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-
         .input-group {
             display: flex;
             gap: 10px;
             margin-bottom: 1.5rem;
         }
-
         input {
             flex-grow: 1;
             padding: 12px 16px;
@@ -65,11 +60,9 @@ code detail , the below is code version post task 3 ( making the appearance of w
             outline: none;
             transition: border-color 0.2s ease;
         }
-
         input:focus {
             border-color: var(--primary-color);
         }
-
         button {
             padding: 12px 24px;
             font-size: 1rem;
@@ -81,15 +74,12 @@ code detail , the below is code version post task 3 ( making the appearance of w
             cursor: pointer;
             transition: background-color 0.2s ease, transform 0.1s ease;
         }
-
         button:hover {
             background-color: var(--primary-hover);
         }
-
         button:active {
             transform: scale(0.98);
         }
-
         .weather-card {
             background-color: #f1f8ff;
             border: 1px solid #cce5ff;
@@ -99,37 +89,31 @@ code detail , the below is code version post task 3 ( making the appearance of w
             display: none; /* Hidden by default */
             animation: fadeIn 0.4s ease-out;
         }
-
         .weather-card h3 {
             margin-top: 0;
             color: #004085;
             font-size: 1.4rem;
         }
-
         .weather-data {
             display: flex;
             justify-content: space-around;
             margin-top: 1rem;
         }
-
         .data-point {
             display: flex;
             flex-direction: column;
         }
-
         .data-label {
             font-size: 0.85rem;
             color: #6c757d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .data-value {
             font-size: 1.5rem;
             font-weight: bold;
             color: #212529;
         }
-
         .loader {
             display: none;
             border: 4px solid #f3f3f3;
@@ -140,38 +124,30 @@ code detail , the below is code version post task 3 ( making the appearance of w
             animation: spin 1s linear infinite;
             margin: 1rem auto;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
         .error-message {
             color: #dc3545;
             margin-top: 1rem;
             display: none;
         }
-
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>UK Weather Tracker</h2>
-        
+        <h2>UK Weather Tracker</h2>     
         <div class="input-group">
             <input type="text" id="postcode" placeholder="e.g., SW1A 1AA" onkeypress="if(event.key === 'Enter') getWeather()">
             <button onclick="getWeather()">Search</button>
-        </div>
-        
+        </div>      
         <div id="loader" class="loader"></div>
         <div id="errorMessage" class="error-message"></div>
-
         <div id="result" class="weather-card">
             <h3 id="locationName">Location</h3>
             <div class="weather-data">
@@ -186,61 +162,47 @@ code detail , the below is code version post task 3 ( making the appearance of w
             </div>
         </div>
     </div>
-
     <script>
         async function getWeather() {
             const postcode = document.getElementById('postcode').value.trim();
             const resultDiv = document.getElementById('result');
             const loader = document.getElementById('loader');
-            const errorMessage = document.getElementById('errorMessage');
-            
+            const errorMessage = document.getElementById('errorMessage');   
             // UI Reset
             resultDiv.style.display = 'none';
-            errorMessage.style.display = 'none';
-     ### // Displays message to enter post code       
+            errorMessage.style.display = 'none';    
             if (!postcode) {
                 showError('Please enter a UK postcode');
                 return;
             }
-
             loader.style.display = 'block';
-
             try {
-       ###         // 1. Get coordinates for the UK postcode
+                // 1. Get coordinates for the UK postcode
                 const geoRes = await fetch(`https://api.postcodes.io/postcodes/${postcode}`);
-                const geoData = await geoRes.json();
-                
+                const geoData = await geoRes.json();      
                 if (geoData.status !== 200) {
                     throw new Error('Invalid postcode or location not found.');
-                }
-                
+                }         
                 const { latitude, longitude, admin_district } = geoData.result;
-
-         ###       // 2. Fetch current weather for those coordinates
-                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
-                
+                // 2. Fetch current weather for those coordinates
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);        
                 if (!weatherRes.ok) {
                     throw new Error('Failed to fetch weather data.');
                 }
-
                 const weatherData = await weatherRes.json();
                 const current = weatherData.current_weather;
-
-                // 3. Update the UI
+            // 3. Update the UI
                 document.getElementById('locationName').innerText = admin_district || "Unknown Area";
                 document.getElementById('tempValue').innerText = `${current.temperature}°C`;
-                document.getElementById('windValue').innerText = `${current.windspeed} km/h`;
-                
+                document.getElementById('windValue').innerText = `${current.windspeed} km/h`;            
                 loader.style.display = 'none';
                 resultDiv.style.display = 'block';
-
             } catch (error) {
                 loader.style.display = 'none';
                 showError(error.message || 'An error occurred while fetching data.');
                 console.error(error);
             }
         }
-
         function showError(message) {
             const errorMessage = document.getElementById('errorMessage');
             errorMessage.innerText = message;
